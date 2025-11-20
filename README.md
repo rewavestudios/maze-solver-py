@@ -1,32 +1,54 @@
 # Maze solver Game
 
+<div align="center">
+<img src="maze-solver.gif" width="500" height="400">
+</div>
+
 ## Setup
 
 Before we dive into the project, let's make sure you are all set up properly. You will need:
 
-- A code editor. I use VS Code, though you can use whatever you're comfortable with.
-- A command line. I work on macOS/Linux, so instructions will be in Bash. I recommend WSL if you're on Windows because it will allow you to use Linux commands. That said, you can use native Windows if you choose; you may just have to convert some commands on your own.
-- Python 3 installed.
+- A code editor. I use [VS Code](https://code.visualstudio.com/), though you can use whatever you're comfortable with.
+- A command line. I you work on macOS/Linux, the instructions will be in Bash. If you're on Windows, I recommend [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) because it will allow you to use Linux commands.
+- [Python 3](https://www.python.org/downloads/) installed.
 
 ### What Are We Building?
 
-We'll be building this awesome maze generator and solver! By the end, your code will be rendering mazes like this one:
+We'll be building this awesome maze generator and solver!
 
-### Tkinter
+## Tkinter
 
-Let's start by just making sure that your `tkinter` installation is working. `tkinter` is a Python library that allows us to create simple graphical user interfaces (GUIs) for our programs. It's not game-specific like Pygame; instead it's more tailored to creating desktop GUIs... but in our case we'll really just be using it as a simple canvas to draw lines on.
+Let's just get a graphical window up and running. [Tkinter](https://docs.python.org/3/library/tkinter.html) is a Python library that allows us to create simple graphical user interfaces (GUIs) for our programs. It isn’t game-specific like Pygame. Instead, it’s more tailored toward creating desktop applications. In our case, however, we’ll mainly use it as a simple canvas for drawing lines. When we run our code, it should open a new window with a blank canvas that our program can then draw on.
 
-### Assignment
-
-For most systems, `tkinter` will work out of the box... but let's make sure that it's working for you.
-
-Run the following command in your terminal to see if it's installed:
+Let's start by just making sure that your `tkinter` installation is working. Run the following command in your terminal to see if it's installed:
 
 ```
 python3 -m tkinter
 ```
 
-You should see a little window pop up with some buttons inside. If you do, you're done — just submit the CLI tests. Otherwise, continue.
+You should see a little window pop up with some buttons inside.
+
+Current code status:
+
+- The repository already contains an implementation matching these requirements in `graphics.py`.
+- The `main.py` entrypoint creates the window and waits for it to close:
+
+```python
+from graphics import Window
+
+def main():
+		win = Window(800, 600)
+		win.wait_for_close()
+
+if __name__ == '__main__':
+		main()
+```
+
+How to run:
+
+```bash
+python3 main.py
+```
 
 ### Troubleshooting
 
@@ -50,7 +72,7 @@ If that's still not working, it's important to understand that `tkinter` depends
 sudo apt-get install python3-tk
 ```
 
-On macOS, make sure you have Homebrew installed, and then run:
+On macOS, make sure you have [Homebrew](https://brew.sh/) installed, and then run:
 
 ```
 brew install python-tk
@@ -59,7 +81,6 @@ brew install python-tk
 Your versions of `python-tk` and Python should match!
 
 If `python3 -m tkinter` still isn't working, try uninstalling and reinstalling Python so that it links to the now-available Tcl/Tk library.
-
 
 ## 👏 Contributing
 
