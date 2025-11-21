@@ -1,4 +1,4 @@
-# Maze solver Game
+# Maze Solver Game
 
 <div align="center">
 <img src="maze-solver.gif" width="500" height="400">
@@ -50,7 +50,7 @@ How to run:
 python3 main.py
 ```
 
-### Troubleshooting
+#### Troubleshooting
 
 If you're seeing an error like this:
 
@@ -81,6 +81,12 @@ brew install python-tk
 Your versions of `python-tk` and Python should match!
 
 If `python3 -m tkinter` still isn't working, try uninstalling and reinstalling Python so that it links to the now-available Tcl/Tk library.
+
+### Current status (repository):
+
+- `graphics.py` implements the `Window` class and also includes `Point` and `Line` classes. The `Line.draw()` method calls `create_line(...)` with `width=2`.
+- `Window.draw_line(line, fill_color)` is implemented and forwards the call to `Line.draw()`.
+- `main.py` draws several sample lines (a frame, cross lines, and extra samples) and uses `win.redraw()` then `win.wait_for_close()` to display and keep the window open until closed.
 
 ## 👏 Contributing
 
