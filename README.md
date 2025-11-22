@@ -9,7 +9,7 @@
 Before we dive into the project, let's make sure you are all set up properly. You will need:
 
 - A code editor. I use [VS Code](https://code.visualstudio.com/), though you can use whatever you're comfortable with.
-- A command line. I you work on macOS/Linux, the instructions will be in Bash. If you're on Windows, I recommend [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) because it will allow you to use Linux commands.
+- A command line. If you work on macOS/Linux, the instructions will be in Bash. If you're on Windows, I recommend [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) because it will allow you to use Linux commands.
 - [Python 3](https://www.python.org/downloads/) installed.
 
 ### What Are We Building?
@@ -84,9 +84,17 @@ If `python3 -m tkinter` still isn't working, try uninstalling and reinstalling P
 
 ### Current status (repository):
 
-- `graphics.py` implements the `Window` class and also includes `Point` and `Line` classes. The `Line.draw()` method calls `create_line(...)` with `width=2`.
-- `Window.draw_line(line, fill_color)` is implemented and forwards the call to `Line.draw()`.
-- `main.py` draws several sample lines (a frame, cross lines, and extra samples) and uses `win.redraw()` then `win.wait_for_close()` to display and keep the window open until closed.
+- `graphics.py` now contains a `Cell` class implemented as described. It stores wall flags, internal coordinates, and a reference to the `Window`.
+- `Cell.draw()` builds `Point`/`Line` objects for any wall that is present and calls `Window.draw_line()` to render them.
+- `main.py` has been updated to create several sample cells with different wall configurations and draw them; run with `python3 main.py` to verify visually.
+
+Manual test steps (quick):
+
+```bash
+python3 main.py
+```
+
+Close the window to finish; the program will print `window closed...` when it exits.
 
 ## 👏 Contributing
 

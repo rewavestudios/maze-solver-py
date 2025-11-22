@@ -46,3 +46,56 @@ class Line:
         canvas.create_line(
             self.p1.x, self.p1.y, self.p2.x, self.p2.y, fill=fill_color, width=2
         )
+
+
+class Cell:
+    def __init__(self, win):
+        # wall flags
+        self.has_left_wall = True
+        self.has_right_wall = True
+        self.has_top_wall = True
+        self.has_bottom_wall = True
+
+        # coordinates (pixel bounds)
+        self.__x1 = -1
+        self.__x2 = -1
+        self.__y1 = -1
+        self.__y2 = -1
+
+        # reference to Window instance (used to draw)
+        self.__win = win
+
+    def draw(self, x1, y1, x2, y2, wall_color="black"):
+        """Update internal coordinates and draw walls based on flags.
+
+        Coordinates are pixel positions where (x1,y1) is top-left and
+        (x2,y2) is bottom-right of the cell.
+        """
+        self.__x1 = x1
+        self.__y1 = y1
+        self.__x2 = x2
+        self.__y2 = y2
+
+        # Left wall: from (x1,y1) to (x1,y2)
+        if self.has_left_wall:
+            p1 = Point(self.__x1, self.__y1)
+            p2 = Point(self.__x1, self.__y2)
+            self.__win.draw_line(Line(p1, p2), wall_color)
+
+        # Top wall: from (x1,y1) to (x2,y1)
+        if self.has_top_wall:
+            p1 = Point(self.__x1, self.__y1)
+            p2 = Point(self.__x2, self.__y1)
+            self.__win.draw_line(Line(p1, p2), wall_color)
+
+        # Right wall: from (x2,y1) to (x2,y2)
+        if self.has_right_wall:
+            p1 = Point(self.__x2, self.__y1)
+            p2 = Point(self.__x2, self.__y2)
+            self.__win.draw_line(Line(p1, p2), wall_color)
+
+        # Bottom wall: from (x1,y2) to (x2,y2)
+        if self.has_bottom_wall:
+            p1 = Point(self.__x1, self.__y2)
+            p2 = Point(self.__x2, self.__y2)
+            self.__win.draw_line(Line(p1, p2), wall_color)
