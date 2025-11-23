@@ -1,7 +1,7 @@
 # Maze Solver Game
 
 <div align="center">
-<img src="maze-solver.gif" width="500" height="400">
+<img src="assets/maze-solver.gif" width="500" height="400">
 </div>
 
 ## Setup
@@ -30,25 +30,27 @@ You should see a little window pop up with some buttons inside.
 
 Current code status:
 
-- The repository already contains an implementation matching these requirements in `graphics.py`.
-- The `main.py` entrypoint creates the window and waits for it to close:
+- The implementation lives under `src/` now. Key modules are:
+	- `src/graphics.py` — `Window`, `Point`, `Line`, and `Cell` primitives used for drawing.
+	- `src/cell.py` — alternative `Cell` implementation used by the `Maze` demo.
+	- `src/maze.py` — `Maze` class that creates a grid of `Cell` instances and animates their drawing.
+	- `src/main.py` — demo script that constructs a Maze and displays it.
 
-```python
-from graphics import Window
+How to run the demos:
 
-def main():
-		win = Window(800, 600)
-		win.wait_for_close()
-
-if __name__ == '__main__':
-		main()
-```
-
-How to run:
+- Quick maze demo (3x4) — uses `src` imports via a small wrapper:
 
 ```bash
-python3 main.py
+python3 run_maze_demo.py
 ```
+
+- Full maze demo (12x16) — run the src demo directly (executes with `src` on sys.path):
+
+```bash
+python3 src/main.py
+```
+
+Both will open a Tkinter window and animate the drawing of the maze; close the window to exit (you should see `window closed...` printed).
 
 #### Troubleshooting
 
@@ -84,9 +86,8 @@ If `python3 -m tkinter` still isn't working, try uninstalling and reinstalling P
 
 ### Current status (repository):
 
-- `graphics.py` now contains a `Cell` class implemented as described. It stores wall flags, internal coordinates, and a reference to the `Window`.
-- `Cell.draw()` builds `Point`/`Line` objects for any wall that is present and calls `Window.draw_line()` to render them.
-- `main.py` has been updated to create several sample cells with different wall configurations and draw them; run with `python3 main.py` to verify visually.
+- `graphics.py` includes `Window.draw_move(to_cell, undo=False, from_cell=None)` which computes centers via `Cell.center()` and draws a `Line` between them in the correct color. The window tracks the last cell so successive `draw_move` calls draw a path.
+- `main.py` demonstrates forward moves and an undo/backtrack between sample cells. Run `python3 main.py` to see it visually.
 
 Manual test steps (quick):
 

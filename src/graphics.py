@@ -9,6 +9,8 @@ class Window:
         self.__canvas = Canvas(self.__root, bg="white", height=height, width=width)
         self.__canvas.pack(fill=BOTH, expand=1)
         self.__running = False
+        # track last cell used for drawing moves
+        self.__last_cell = None
 
     def redraw(self):
         self.__root.update_idletasks()
@@ -22,6 +24,42 @@ class Window:
 
     def draw_line(self, line, fill_color="black"):
         line.draw(self.__canvas, fill_color)
+
+    def draw_move(self, to_cell, undo=False, from_cell=None):
+        """Draw a move between two cells.
+
+        If `from_cell` is None, the method will use the internally tracked
+        last cell (`self.__last_cell`). If there's no known from-cell, the
+        call will set the last cell and return without drawing.
+
+        `undo` controls color: red for forward moves, gray for undo/backtrack.
+        """
+        # determine source cell
+        src = from_cell if from_cell is not None else self.__last_cell
+        # if we don't have a source, store and exit
+        if src is None:
+            self.__last_cell = to_cell
+            return
+
+        # compute centers
+        try:
+            sx, sy = src.center()
+            tx, ty = to_cell.center()
+        except Exception:
+            # if cells don't expose center(), try access mangled attributes
+            sx = (src._Cell__x1 + src._Cell__x2) // 2
+            sy = (src._Cell__y1 + src._Cell__y2) // 2
+            tx = (to_cell._Cell__x1 + to_cell._Cell__x2) // 2
+            ty = (to_cell._Cell__y1 + to_cell._Cell__y2) // 2
+
+        color = "gray" if undo else "red"
+        p1 = Point(sx, sy)
+        p2 = Point(tx, ty)
+        self.draw_line(Line(p1, p2), color)
+
+        # update last cell
+        if not undo:
+            self.__last_cell = to_cell
 
     def close(self):
         self.__running = False
@@ -99,3 +137,9 @@ class Cell:
             p1 = Point(self.__x1, self.__y2)
             p2 = Point(self.__x2, self.__y2)
             self.__win.draw_line(Line(p1, p2), wall_color)
+
+    def center(self):
+        """Return the center pixel coordinates (cx, cy) of this cell."""
+        cx = (self.__x1 + self.__x2) // 2
+        cy = (self.__y1 + self.__y2) // 2
+        return cx, cy
