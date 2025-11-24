@@ -97,6 +97,18 @@ python3 main.py
 
 Close the window to finish; the program will print `window closed...` when it exits.
 
+## Running Unit Tests
+
+We added a simple test suite that checks Maze creation without requiring a GUI.
+
+Run the tests from the repository root (they add `src/` to `sys.path` automatically):
+
+```bash
+python3 tests.py
+```
+
+The tests use Python's `unittest` module and verify that `Maze` constructs the expected 2D `__cells` structure for several sizes.
+
 ## 👏 Contributing
 
 I would love your help! Contribute by forking the repo and opening pull requests. Please ensure that your code passes the existing tests and linting, and write tests to test your changes if applicable.
