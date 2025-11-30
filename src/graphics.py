@@ -2,9 +2,10 @@ from tkinter import Tk, BOTH, Canvas
 
 
 class Window:
-    def __init__(self, width, height):
+    def __init__(self, width, height, title=None):
         self.__root = Tk()
-        self.__root.title("Maze Solver")
+        # default title, override if provided
+        self.__root.title("Maze Solver" if title is None else title)
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
         self.__canvas = Canvas(self.__root, bg="white", height=height, width=width)
         self.__canvas.pack(fill=BOTH, expand=1)
@@ -25,7 +26,7 @@ class Window:
     def draw_line(self, line, fill_color="black"):
         line.draw(self.__canvas, fill_color)
 
-    def draw_move(self, to_cell, undo=False, from_cell=None):
+    def draw_move(self, to_cell, undo=False):
         """Draw a move between two cells.
 
         If `from_cell` is None, the method will use the internally tracked
@@ -34,9 +35,9 @@ class Window:
 
         `undo` controls color: red for forward moves, gray for undo/backtrack.
         """
-        # determine source cell
-        src = from_cell if from_cell is not None else self.__last_cell
-        # if we don't have a source, store and exit
+        # determine source cell (use internally tracked last cell)
+        src = self.__last_cell
+        # if we don't have a source yet, store and exit
         if src is None:
             self.__last_cell = to_cell
             return
