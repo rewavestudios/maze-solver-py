@@ -24,6 +24,7 @@ class Maze:
         self.__win = win
 
         self.__create_cells()
+        self.__break_entrance_and_exit()
 
     def __create_cells(self):
         for i in range(self.__num_cols):
@@ -34,6 +35,28 @@ class Maze:
         for i in range(self.__num_cols):
             for j in range(self.__num_rows):
                 self.__draw_cell(i, j)
+        # after drawing full grid, create entrance and exit
+        self.__break_entrance_and_exit()
+
+    def __break_entrance_and_exit(self):
+        """Remove the entrance (top wall of top-left cell) and the exit
+        (bottom wall of bottom-right cell) and redraw those cells.
+        """
+        if not self.__cells:
+            return
+        # entrance: top wall of top-left cell
+        try:
+            self.__cells[0][0].has_top_wall = False
+            self.__draw_cell(0, 0)
+
+            # exit: bottom wall of bottom-right cell
+            last_i = self.__num_cols - 1
+            last_j = self.__num_rows - 1
+            self.__cells[last_i][last_j].has_bottom_wall = False
+            self.__draw_cell(last_i, last_j)
+        except Exception:
+            # defensive: if cells aren't created or indices invalid, do nothing
+            return
 
     def __draw_cell(self, i, j):
         if self.__win is None:
@@ -50,3 +73,9 @@ class Maze:
             return
         self.__win.redraw()
         time.sleep(0.05)
+
+    def __break_entrance_and_exit(self):
+        self.__cells[0][0].has_top_wall = False
+        self.__draw_cell(0, 0)
+        self.__cells[self.__num_cols - 1][self.__num_rows - 1].has_bottom_wall = False
+        self.__draw_cell(self.__num_cols - 1, self.__num_rows - 1)
