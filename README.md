@@ -52,6 +52,18 @@ python3 src/main.py
 
 Both will open a Tkinter window and animate the drawing of the maze; close the window to exit (you should see `window closed...` printed).
 
+### Randomness / Seeding
+
+The maze generation uses randomness to carve passages. For reproducible mazes (useful while testing or debugging), `Maze` accepts an optional `seed` parameter. When you pass a fixed integer (for example `10`) the same maze will be generated every run. If you omit the `seed` argument, a different maze will be produced each run.
+
+Example (see `src/main.py`):
+
+```python
+maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win, seed=10)
+```
+
+For automated tests, the `Cell` object exposes a `visited` flag that the generator uses internally to track progress while carving passages.
+
 #### Troubleshooting
 
 If you're seeing an error like this:

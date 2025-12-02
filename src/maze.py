@@ -13,6 +13,7 @@ class Maze:
         cell_size_x,
         cell_size_y,
         win=None,
+        seed=None,
     ):
         self.__cells = []
         self.__x1 = x1
@@ -22,8 +23,13 @@ class Maze:
         self.__cell_size_x = cell_size_x
         self.__cell_size_y = cell_size_y
         self.__win = win
+        # optional deterministic randomness for testing/debugging
+        if seed is not None:
+            random.seed(seed)
 
+        # create grid, carve passages, then open entrance/exit
         self.__create_cells()
+        self.__break_walls_r(0, 0)
         self.__break_entrance_and_exit()
 
     def __create_cells(self):
@@ -35,8 +41,7 @@ class Maze:
         for i in range(self.__num_cols):
             for j in range(self.__num_rows):
                 self.__draw_cell(i, j)
-        # after drawing full grid, create entrance and exit
-        self.__break_entrance_and_exit()
+
 
     def __break_entrance_and_exit(self):
         """Remove the entrance (top wall of top-left cell) and the exit
@@ -74,8 +79,53 @@ class Maze:
         self.__win.redraw()
         time.sleep(0.05)
 
-    def __break_entrance_and_exit(self):
-        self.__cells[0][0].has_top_wall = False
-        self.__draw_cell(0, 0)
-        self.__cells[self.__num_cols - 1][self.__num_rows - 1].has_bottom_wall = False
-        self.__draw_cell(self.__num_cols - 1, self.__num_rows - 1)
+
+    def __break_walls_r(self, i, j):
+        self.__cells[i][j].visited = True
+        while True:
+            next_index_list = []
+
+            # determine which cell(s) to visit next
+            # left
+            if i > 0 and not self.__cells[i - 1][j].visited:
+                next_index_list.append((i - 1, j))
+            # right
+            if i < self.__num_cols - 1 and not self.__cells[i + 1][j].visited:
+                next_index_list.append((i + 1, j))
+            # up
+            if j > 0 and not self.__cells[i][j - 1].visited:
+                next_index_list.append((i, j - 1))
+            # down
+            if j < self.__num_rows - 1 and not self.__cells[i][j + 1].visited:
+                next_index_list.append((i, j + 1))
+
+            # if there is nowhere to go from here
+            # just break out
+            if len(next_index_list) == 0:
+                self.__draw_cell(i, j)
+                return
+
+            # randomly choose the next direction to go
+            direction_index = random.randrange(len(next_index_list))
+            next_index = next_index_list[direction_index]
+
+            # knock out walls between this cell and the next cell(s)
+            # right
+            if next_index[0] == i + 1:
+                self.__cells[i][j].has_right_wall = False
+                self.__cells[i + 1][j].has_left_wall = False
+            # left
+            if next_index[0] == i - 1:
+                self.__cells[i][j].has_left_wall = False
+                self.__cells[i - 1][j].has_right_wall = False
+            # down
+            if next_index[1] == j + 1:
+                self.__cells[i][j].has_bottom_wall = False
+                self.__cells[i][j + 1].has_top_wall = False
+            # up
+            if next_index[1] == j - 1:
+                self.__cells[i][j].has_top_wall = False
+                self.__cells[i][j - 1].has_bottom_wall = False
+
+            # recursively visit the next cell
+            self.__break_walls_r(next_index[0], next_index[1])
